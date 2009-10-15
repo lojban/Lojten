@@ -85,10 +85,11 @@
    (get-upper-vowel-position prec-jbo-consonant)))
 
 ;Note: there MUST be some library function defined like that already!
-(defn append [coll1 coll2]
-  (if (= coll1 '())
-    coll2
-    (cons (first coll1) (append (rest coll1) coll2))))
+;Note: it's concat...
+;(defn append [coll1 coll2]
+;  (if (= coll1 '())
+;    coll2
+;    (cons (first coll1) (append (rest coll1) coll2))))
 
 (defn combine-cons-vowel [cons vowel]
   (list
@@ -99,15 +100,15 @@
 
 (defn generate-table []
   ;;Uppercase solitary consonants
-  (append (map #(list % (transcribe-consonant %)) (uppercase-cons))
+  (concat (map #(list % (transcribe-consonant %)) (uppercase-cons))
 	  ;;Uppercase consonant-vowel pairs
-	  (append (for [consonant (uppercase-cons)
-			vowel (get-firsts vowel-rel)]
-		    (combine-cons-vowel consonant vowel))
-		  ;;Lowercase solitary consonants
-		  (append (map #(list % (transcribe-consonant %)) (lowercase-cons))
-			  ;;Lowercase consonant-vowel pairs
-			  (append (for [consonant (get-firsts cons-rel)
-					vowel (get-firsts vowel-rel)]
-				    (combine-cons-vowel consonant vowel))
-				  '())))))
+	  (for [consonant (uppercase-cons)
+		vowel (get-firsts vowel-rel)]
+	    (combine-cons-vowel consonant vowel))
+	  ;;Lowercase solitary consonants
+	  (map #(list % (transcribe-consonant %)) (lowercase-cons))
+	  ;;Lowercase consonant-vowel pairs
+	  (for [consonant (get-firsts cons-rel)
+		vowel (get-firsts vowel-rel)]
+	    (combine-cons-vowel consonant vowel))
+	  '()))
