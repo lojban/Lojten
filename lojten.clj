@@ -134,6 +134,29 @@
 (defn trans [inp]
   (transcribe-string inp ""))
 
+(def header
+     "
+;;; <li> lojten.mim
+;;;
+;;; Tengwar input method for Lojban.
+
+(title &quot;lojten&quot;)
+
+(map
+  (trans
+")
+
+(def ending
+     "
+))
+(state
+  (init
+    (trans)))
+")
+
 (defn -main
   [inp]
-  (cond (= inp "--gen") (println (generate-table))))
+  (cond (= inp "--gen") (do
+			  (print header)
+			  (apply print (generate-table))
+			  (println ending))))

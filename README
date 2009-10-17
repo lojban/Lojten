@@ -1,0 +1,24 @@
+Lojten - an m17n input method for Tengwar-Lojban.
+
+Written by Roman Naumann in late 2009
+
+You can do whatever you want with the sources, but notice:
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+The file cljoure.jar comes from http://clojure.org, it has it's own license (see clojure.org for details).
+
+################################################################################
+
+So, now the interesting part:
+How do can you get your own lojten.mim file and how do you install it?
+
+Simply run gen-table.bash from the project's main directory!
+You should now see a lojten.mim file.
+Simply copy that file to /usr/share/m17n/ or /usr/local/share/m17n and when you restart SCIM, you should see the t-lojten listet as an input method.
+
+(you have to install and configure SCIM and m17n of course)
+
+Have fun!
