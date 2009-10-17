@@ -140,6 +140,8 @@
 ;;;
 ;;; Tengwar input method for Lojban.
 
+(input-method t lojten)
+
 (title &quot;lojten&quot;)
 
 (map
@@ -158,5 +160,5 @@
   [inp]
   (cond (= inp "--gen") (do
 			  (print header)
-			  (apply print (generate-table))
+			  (apply pr (generate-table))
 			  (println ending))))
