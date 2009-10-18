@@ -26,7 +26,8 @@
 
 (def exceptions
      '(("sy" "8É")
-       ("ry" "6É")))
+       ("ry" "6É")
+       ("zy" "<Ë")))
 
 ;takes a list of lists and returns a
 ;list of the first elements of the nested lists
@@ -36,7 +37,8 @@
 ;returns a list of all consonants, lowercase
 (defn lowercase-cons []
   (remove #(or (= % "")
-	       (= % ".")) (get-firsts cons-rel)))
+	       ;(= % ".")
+	       ) (get-firsts cons-rel)))
 
 ;returns a list of all consonants, uppercase
 (defn uppercase-cons []
@@ -141,6 +143,9 @@
 
 (defn trans [inp]
   (transcribe-string inp ""))
+
+
+
 
 (def header
      "
