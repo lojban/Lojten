@@ -10,7 +10,7 @@
        ("n" "5") ("m" "t")
        ("r" "6")
        ("l" "j")
-       ("s" "K")           ("z" "k")
+       ("s" "i")           ("z" "k")
        ("" "`")
        ("." "`")
        ("'" "~")))
@@ -23,6 +23,9 @@
        ("o" "^" "Y" "H" "N")
        ("u" "&" "U" "J" "M")
        ("y" "È" "É" "Ê" "Ë")))
+
+(def exceptions
+     '(("sy" "8É")))
 
 ;takes a list of lists and returns a
 ;list of the first elements of the nested lists
@@ -75,10 +78,10 @@
 	 (= c "k")
 	 (= c "c")
 	 (= c "x")
-	 (= c "r")) 2
+	 (= c "r")
+	 (= c "s")) 2
 	(= c "f") 3
 	(or
-	 (= c "s")
 	 (= c "")
 	 (= c ".")
 	 (= c "'")) 4))
@@ -92,11 +95,15 @@
 
 ;takes a consonant and a vowel and returns a full transcription of the pair
 (defn combine-cons-vowel [cons vowel]
-  (list
-   (format "%s%s" cons vowel)
-   (format "%s%s"
-	   (transcribe-consonant cons)
-	   (transcribe-vowel (.toLowerCase vowel) (.toLowerCase cons)))))
+  (let [fst (format "%s%s" cons vowel)
+	exception (filter #(= (first %) fst) exceptions)]
+    (list
+     fst
+     (if (not (= exception '()))
+       (second (first exception))
+       (format "%s%s"
+	       (transcribe-consonant cons)
+	       (transcribe-vowel (.toLowerCase vowel) (.toLowerCase cons)))))))
 
 ;generates the final transcription table
 (defn generate-table []
