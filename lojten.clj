@@ -8,7 +8,7 @@
        ("f" "e") ("c" "d") ("x" "c")
        ("v" "r") ("j" "f")
        ("n" "5") ("m" "t")
-       ("r" "6")
+       ("r" "7")
        ("l" "j")
        ("s" "i")           ("z" "k")
        ("" "`")
@@ -25,7 +25,8 @@
        ("y" "È" "É" "Ê" "Ë")))
 
 (def exceptions
-     '(("sy" "8É")))
+     '(("sy" "8É")
+       ("ry" "6É")))
 
 ;takes a list of lists and returns a
 ;list of the first elements of the nested lists
