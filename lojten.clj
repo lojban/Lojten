@@ -12,7 +12,6 @@
        ("l" "j")
        ("s" "i")           ("z" "k")
        ("" "`")
-       ("." "`")
        ("'" "~")))
 
 ;the same for vowels, but here we have four different positions for each
@@ -25,7 +24,8 @@
        ("y" "È" "É" "Ê" "Ë")))
 
 (def exceptions
-     '(("sy" "8É")
+     '(("." "=")
+       ("sy" "8É")
        ("ry" "6É")
        ("zy" "<Ë")))
 
@@ -56,13 +56,6 @@
     false
     true))
 
-;transcribes a consonant using the consonant transcription table
-;uppercase consonants being interpreted as lowercase
-(defn transcribe-consonant [jbo]
-  (if (containsUpperCase jbo)
-    (format "%s%s" (second (lget cons-rel (.toLowerCase jbo))) \")
-    (second (lget cons-rel jbo))))
-
 ;returns the correct position of a tengwar vowel above a consonant c
 (defn get-upper-vowel-position [c]
   (cond (or
@@ -86,15 +79,22 @@
 	(= c "f") 3
 	(or
 	 (= c "")
-	 (= c ".")
+	 ;(= c ".")
 	 (= c "'")) 4))
 
 ;transcribes a vowel, uses the vowel position according
 ;to prec(eding)-jbo-consonant
-(defn transcribe-vowel [jbo-vowel prec-jbo-consonant]
+(defn transcribe-vowel [jbo-vowel prec-letter]
   (nth
    (lget vowel-rel jbo-vowel)
-   (get-upper-vowel-position prec-jbo-consonant)))
+   (get-upper-vowel-position prec-letter)))
+
+;transcribes a consonant using the consonant transcription table
+;uppercase consonants being interpreted as lowercase
+(defn transcribe-consonant [jbo]
+  (if (containsUpperCase jbo)
+    (format "%s%s" (second (lget cons-rel (.toLowerCase jbo))) \")
+    (second (lget cons-rel jbo))))
 
 ;takes a consonant and a vowel and returns a full transcription of the pair
 (defn combine-cons-vowel [cons vowel]
@@ -111,6 +111,8 @@
 ;generates the final transcription table
 (defn generate-table []
   (lazy-cat
+   ;;add the .
+   (list (first exceptions))
    ;;Uppercase solitary consonants
    (map #(list % (transcribe-consonant %)) (uppercase-cons))
    ;;Uppercase consonant-vowel pairs
