@@ -11,6 +11,7 @@
        ("r" "7")
        ("l" "j")
        ("s" "i")           ("z" "k")
+       ("." "=")
        ("" "`")
        ("'" "~")))
 
@@ -24,7 +25,8 @@
        ("y" "È" "É" "Ê" "Ë")))
 
 (def exceptions
-     '(("." "=")
+     '(("s" "8")
+       ("z" "<")
        ("sy" "8É")
        ("ry" "6É")
        ("zy" "<Ë")))
@@ -36,9 +38,8 @@
 
 ;returns a list of all consonants, lowercase
 (defn lowercase-cons []
-  (remove #(or (= % "")
-	       ;(= % ".")
-	       ) (get-firsts cons-rel)))
+  (remove #(= % "")
+	  (get-firsts cons-rel)))
 
 ;returns a list of all consonants, uppercase
 (defn uppercase-cons []
@@ -78,8 +79,8 @@
 	 (= c "s")) 2
 	(= c "f") 3
 	(or
+	 (= c ".")
 	 (= c "")
-	 ;(= c ".")
 	 (= c "'")) 4))
 
 ;transcribes a vowel, uses the vowel position according
@@ -95,6 +96,13 @@
   (if (containsUpperCase jbo)
     (format "%s%s" (second (lget cons-rel (.toLowerCase jbo))) \")
     (second (lget cons-rel jbo))))
+
+;same as transcibe-consonant, but with exceptions.
+(defn transcribe-consonant-we [jbo]
+  (let [exception (filter #(= (first %) jbo) exceptions)]
+    (if (not (= exception '()))
+      (second (first exception))
+      (transcribe-consonant jbo))))
 
 ;takes a consonant and a vowel and returns a full transcription of the pair
 (defn combine-cons-vowel [cons vowel]
@@ -112,15 +120,15 @@
 (defn generate-table []
   (lazy-cat
    ;;add the .
-   (list (first exceptions))
+   ;(list '("." "="))
    ;;Uppercase solitary consonants
-   (map #(list % (transcribe-consonant %)) (uppercase-cons))
+   (map #(list % (transcribe-consonant-we %)) (uppercase-cons))
    ;;Uppercase consonant-vowel pairs
    (for [consonant (uppercase-cons)
 	 vowel (get-firsts vowel-rel)]
      (combine-cons-vowel consonant vowel))
    ;;Lowercase solitary consonants
-   (map #(list % (transcribe-consonant %)) (lowercase-cons))
+   (map #(list % (transcribe-consonant-we %)) (lowercase-cons))
    ;;Lowercase consonant-vowel pairs
    (for [consonant (get-firsts cons-rel)
 	 vowel (get-firsts vowel-rel)]
